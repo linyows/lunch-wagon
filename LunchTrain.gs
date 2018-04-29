@@ -1,3 +1,10 @@
+/**
+ * Lunch Train
+ * notify slack channel for lunch members from slack usergroup random selects.
+ *
+ * Copyright (c) 2018 Tomohisa Oda
+ */
+
 var LunchTrain = function() {
   this.token = PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN')
   this.channel = PropertiesService.getScriptProperties().getProperty('SLACK_CHANNEL')
