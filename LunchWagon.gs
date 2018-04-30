@@ -1,11 +1,11 @@
 /**
- * Lunch Train
+ * Lunch Wagon
  * notify slack channel for lunch members from slack usergroup random selects.
  *
  * Copyright (c) 2018 Tomohisa Oda
  */
 
-var LunchTrain = function() {
+var LunchWagon = function() {
   this.token = PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN')
   this.channel = PropertiesService.getScriptProperties().getProperty('SLACK_CHANNEL')
   this.usergroup = PropertiesService.getScriptProperties().getProperty('SLACK_USERGROUP_ID')
@@ -15,7 +15,7 @@ var LunchTrain = function() {
   this.skipCount = 5
 }
 
-LunchTrain.prototype = {
+LunchWagon.prototype = {
   go: function() {
     var members = this.getMembers()
     this.saveToSheet(members)
@@ -187,8 +187,8 @@ LunchTrain.prototype = {
   notifyToSlack: function(message) {
     this.client().channelsJoin(this.channel)
     var opts = {
-      username: 'Lunch Train',
-      icon_url: 'https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2016-06-13/50545179413_3fa6b40802505106e996_72.png',
+      username: 'Lunch Wagon',
+      icon_url: 'https://raw.githubusercontent.com/linyows/lunch-wagon.gs/master/misc/icon.png',
     }
     this.client().chatPostMessage(this.channel, message, opts)
   },
@@ -204,7 +204,7 @@ LunchTrain.prototype = {
   },
 }
 
-var lunchTrain = new LunchTrain()
+var lunchWagon = new LunchWagon()
 
 /**
  * notifyChoseMembers notify chose members to slack before a day
@@ -212,8 +212,8 @@ var lunchTrain = new LunchTrain()
 function notifyChoseMembers() {
   var date = new Date()
   date.setDate(date.getDate() + 1)
-  if (!lunchTrain.isHoliday(date)) {
-    lunchTrain.go()
+  if (!lunchWagon.isHoliday(date)) {
+    lunchWagon.go()
   }
 }
 
@@ -222,7 +222,7 @@ function notifyChoseMembers() {
  */
 function notifyFinal() {
   var date = new Date()
-  if (!lunchTrain.isHoliday(date)) {
-    lunchTrain.notifyFinal()
+  if (!lunchWagon.isHoliday(date)) {
+    lunchWagon.notifyFinal()
   }
 }
