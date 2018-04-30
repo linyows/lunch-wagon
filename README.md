@@ -11,7 +11,13 @@ Notify the Slack channel of the lunch members selected from the Slack user group
 Usage
 -----
 
-### Environment
+1. Create google sheet
+1. Add google app script
+1. Set environments
+1. Add triger
+   ![trigger](https://raw.githubusercontent.com/linyows/lunch-wagon.gs/master/misc/lunch-wagon.png)
+
+### Environments
 
 - SLACK_ACCESS_TOKEN
 - SLACK_CHANNEL
