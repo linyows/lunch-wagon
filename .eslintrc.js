@@ -7,7 +7,7 @@ module.exports = {
     "node": true
   },
   "rules": {
-    "max-len": ["error", {"code": 100}],
+    "max-len": ["error", {"code": 160}],
     "camelcase": "off",
     "no-var": "off",
     "no-unused-vars": "off",
