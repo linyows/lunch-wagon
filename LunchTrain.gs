@@ -109,10 +109,10 @@ LunchTrain.prototype = {
     return members
   },
   shuffle: function(array) {
-    var n = array.length, t, i
+    var n = array.length
     while (n) {
-      i = Math.floor(Math.random() * n--)
-      t = array[n]
+      var i = Math.floor(Math.random() * n--)
+      var t = array[n]
       array[n] = array[i]
       array[i] = t
     }
@@ -206,6 +206,9 @@ LunchTrain.prototype = {
 
 var lunchTrain = new LunchTrain()
 
+/**
+ * notifyChoseMembers notify chose members to slack before a day
+ */
 function notifyChoseMembers() {
   var date = new Date()
   date.setDate(date.getDate() + 1)
@@ -214,6 +217,9 @@ function notifyChoseMembers() {
   }
 }
 
+/**
+ * notifyFinal notify chose members to slack at today morning
+ */
 function notifyFinal() {
   var date = new Date()
   if (!lunchTrain.isHoliday(date)) {
