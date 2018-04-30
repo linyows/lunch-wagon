@@ -15,7 +15,7 @@ Usage
 1. Add google app script
 1. Set environments
 1. Add triger
-   ![trigger](https://raw.githubusercontent.com/linyows/lunch-wagon.gs/master/misc/lunch-wagon.png)
+   ![trigger](https://raw.githubusercontent.com/linyows/lunch-wagon.gs/master/misc/trigger.png)
 
 ### Environments
 
