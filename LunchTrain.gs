@@ -123,14 +123,14 @@ LunchTrain.prototype = {
     for (var i = 0; i < array.length; i++) {
       message = message + ' <@' + array[i] + '>'
     }
-    return message + "\n参加者に変更があったら、 <" + this.sheetUrl + "|管理シート> を更新してください"
+    return message + '\n参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください'
   },
   buildFinalMessage: function(array) {
     var message = '今日、ランチの予定があります！都合が悪ければお知らせください'
     for (var i = 0; i < array.length; i++) {
       message = message + ' <@' + array[i] + '>'
     }
-    return message + "\n参加者に変更があったら、 <" + this.sheetUrl + "|管理シート> を更新してください"
+    return message + '\n参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください'
   },
   getMembersBySlack: function() {
     var opts = {
@@ -138,8 +138,8 @@ LunchTrain.prototype = {
       payload: {
         token: this.token,
         usergroup: this.usergroup,
-        include_disabled: 1
-      }
+        include_disabled: 1,
+      },
     }
     var res = UrlFetchApp.fetch('https://slack.com/api/usergroups.users.list', opts)
     return JSON.parse(res.getContentText()).users
@@ -162,12 +162,12 @@ LunchTrain.prototype = {
         method: 'post',
         payload: {
           token: this.token,
-          user: users[i]
-        }
+          user: users[i],
+        },
       }
       var res = UrlFetchApp.fetch('https://slack.com/api/users.profile.get', opts)
       var name = JSON.parse(res.getContentText()).profile.display_name
-      profiles.push({ id: users[i], name: name })
+      profiles.push({id: users[i], name: name})
     }
     return profiles
   },
@@ -188,13 +188,13 @@ LunchTrain.prototype = {
     this.client().channelsJoin(this.channel)
     var opts = {
       username: 'Lunch Train',
-      icon_url: 'https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2016-06-13/50545179413_3fa6b40802505106e996_72.png'
+      icon_url: 'https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2016-06-13/50545179413_3fa6b40802505106e996_72.png',
     }
     this.client().chatPostMessage(this.channel, message, opts)
   },
   isHoliday: function(date) {
     var weekInt = date.getDay()
-    if (weekInt <= 0 || 6 <= weekInt){
+    if (weekInt <= 0 || 6 <= weekInt) {
       return true
     }
     var calendarId = 'ja.japanese#holiday@group.v.calendar.google.com'
