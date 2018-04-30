@@ -1,7 +1,7 @@
 {
-  "name": "lunch-train",
+  "name": "lunch-wagon",
   "version": "1.0.0",
-  "description": "Notify slack channel for lunch members from slack usergroup random selects",
+  "description": "Notify lunch members from slack usergroup random selects",
   "scripts": {
     "ci": "npm i && npm run lint",
     "lint": "eslint **/*.gs --fix"
@@ -17,5 +17,5 @@
   "author": "linyows",
   "license": "MIT",
   "private": true,
-  "homepage": "https://github.com/linyows/lunch-train.gs"
+  "homepage": "https://github.com/linyows/lunch-wagon.gs"
 }
