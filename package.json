@@ -1,0 +1,21 @@
+{
+  "name": "lunch-train",
+  "version": "1.0.0",
+  "description": "Notify slack channel for lunch members from slack usergroup random selects",
+  "scripts": {
+    "ci": "npm i && npm run lint",
+    "lint": "eslint **/*.gs --fix"
+  },
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-google": "^0.9.1",
+    "eslint-plugin-async-await": "0.0.0"
+  },
+  "eslintIgnore": [
+    "**/node_modules/**"
+  ],
+  "author": "linyows",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://github.com/linyows/lunch-train.gs"
+}
