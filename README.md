@@ -6,6 +6,7 @@
 Notify the Slack channel of the lunch members selected from the Slack user group (skipping holidays). Also, keep records on Google Sheets so that members do not overlap.
 
 <a href="https://travis-ci.org/linyows/lunch-wagon.gs" title="travis"><img src="https://img.shields.io/travis/linyows/lunch-wagon.gs.svg?style=flat-square"></a>
+<a href="https://github.com/linyows/lunch-wagon.gs/blob/master/LICENSE" title="MIT License"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square"></a>
 
 Usage
 -----
