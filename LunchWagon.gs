@@ -83,7 +83,6 @@ LunchWagon.prototype = {
       var row = data[rowIndex]
       for (var colIndex = 0; colIndex < row.length; colIndex++) {
         if (row[colIndex].trim() !== '') {
-          console.log([row[colIndex].trim(), this.slackNameToId(row[colIndex].trim())])
           members.push(this.slackNameToId(row[colIndex].trim()))
         }
       }
