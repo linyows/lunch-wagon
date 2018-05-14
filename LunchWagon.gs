@@ -13,6 +13,7 @@ var LunchWagon = function() {
   this.sheetUrl = 'https://docs.google.com/spreadsheets/d/' + this.sheetId + '/edit'
   this.partyCount = 4
   this.skipCount = 5
+  this.membersNotGo = []
 }
 
 LunchWagon.prototype = {
@@ -76,7 +77,7 @@ LunchWagon.prototype = {
       rowIndex = 1
     }
     var data = this.sheet().getSheetValues(rowIndex, columnIndex, rowCount, this.sheet().getLastColumn())
-    console.log(data)
+
     var members = []
     for (var rowIndex = 0; rowIndex < data.length; rowIndex++) {
       var row = data[rowIndex]
@@ -87,6 +88,11 @@ LunchWagon.prototype = {
         }
       }
     }
+    
+    for (var noGoIndex = 0; noGoIndex < this.membersNotGo; noGoIndex++) {
+      members.push(this.slackNameToId(this.membersNotGo[noGoIndex])) 
+    }
+    
     return members
   },
   availableMembers: function() {
