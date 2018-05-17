@@ -20,11 +20,27 @@ LunchWagon.prototype = {
   go: function() {
     var members = this.getMembers()
     this.saveToSheet(members)
-    this.notifyToSlack(this.buildMessage(members))
+    var attachments = [{
+      title: 'ランダムにメンバーを選んでランチへ行く通知です',
+      title_link: 'https://github.com/linyows/lunch-wagon.gs',
+      color: '#ffc844',
+      text: '行ける or 行けない をスレッドやリアクション絵文字などでお知らせください。'
+          + '参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください'
+    }]
+    this.notifyToSlack(this.buildMessage(members), JSON.stringify(attachments))
   },
   notifyFinal: function() {
     var members = this.lastMembersOnSheet()
-    this.notifyToSlack(this.buildFinalMessage(members))
+    if (members.length === 0) {
+      return
+    }
+    var attachments = [{
+      title: 'ランダムにメンバーを選んでランチへ行く通知です',
+      title_link: 'https://github.com/linyows/lunch-wagon.gs',
+      color: '#ffc844',
+      text: '参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください'
+    }]
+    this.notifyToSlack(this.buildFinalMessage(members), JSON.stringify(attachments))
   },
   slackMembers: function() {
     if (this.slackMembers_ === undefined) {
@@ -87,11 +103,11 @@ LunchWagon.prototype = {
         }
       }
     }
-    
-    for (var noGoIndex = 0; noGoIndex < this.membersNotGo; noGoIndex++) {
-      members.push(this.slackNameToId(this.membersNotGo[noGoIndex])) 
+
+    for (var noGoIndex = 0; noGoIndex < this.membersNotGo.length; noGoIndex++) {
+      members.push(this.slackNameToId(this.membersNotGo[noGoIndex]))
     }
-    
+
     return members
   },
   availableMembers: function() {
@@ -124,18 +140,18 @@ LunchWagon.prototype = {
     return array
   },
   buildMessage: function(array) {
-    var message = '明日、ランチ一緒に行きませんか！都合が悪ければお知らせください'
+    var message = '明日、ランチ一緒に行きませんか！'
     for (var i = 0; i < array.length; i++) {
       message = message + ' <@' + array[i] + '>'
     }
-    return message + '\n参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください'
+    return message
   },
   buildFinalMessage: function(array) {
-    var message = '今日、ランチの予定があります！都合が悪ければお知らせください'
+    var message = '今日、ランチの予定があります！'
     for (var i = 0; i < array.length; i++) {
       message = message + ' <@' + array[i] + '>'
     }
-    return message + '\n参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください'
+    return message
   },
   getMembersBySlack: function() {
     var opts = {
@@ -189,11 +205,14 @@ LunchWagon.prototype = {
     }
     return this.slack
   },
-  notifyToSlack: function(message) {
+  notifyToSlack: function(message, attachments) {
     this.client().channelsJoin(this.channel)
     var opts = {
       username: 'Lunch Wagon',
       icon_url: 'https://raw.githubusercontent.com/linyows/lunch-wagon.gs/master/misc/icon.png',
+    }
+    if (attachments) {
+      opts.attachments = attachments
     }
     this.client().chatPostMessage(this.channel, message, opts)
   },
