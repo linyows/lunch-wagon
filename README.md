@@ -11,6 +11,8 @@ Notify the Slack channel of the lunch members selected from the Slack user group
 Usage
 -----
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/linyows/lunch-wagon.gs.svg)](https://greenkeeper.io/)
+
 1. Create google sheet
 1. Add google app script
 1. Set environments
