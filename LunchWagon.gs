@@ -87,7 +87,8 @@ LunchWagon.prototype = {
     var rowIndex = this.sheet().getLastRow()
     var rowCount = this.skipCount
     if (rowIndex > rowCount) {
-      rowIndex = rowIndex - rowCount
+      // this increment for start
+      rowIndex = rowIndex - rowCount + 1
     } else {
       rowCount = rowIndex
       rowIndex = 1
