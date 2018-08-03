@@ -14,6 +14,7 @@ var LunchWagon = function() {
   this.partyCount = 4
   this.skipCount = 5
   this.membersNotGo = []
+  this.membersMustGo = []
 }
 
 LunchWagon.prototype = {
@@ -27,6 +28,12 @@ LunchWagon.prototype = {
       text: '行ける or 行けない をスレッドやリアクション絵文字などでお知らせください。'
           + '参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください'
     }]
+    if (this.membersMustGo.length > 0) {
+      attachments[0]['fields'] = [{
+        title: 'ヘビロテ メンバー :fire:',
+        value: this.membersMustGo.join(', ')
+      }]
+    }
     this.notifyToSlack(this.buildMessage(members), JSON.stringify(attachments))
   },
   notifyFinal: function() {
@@ -109,6 +116,10 @@ LunchWagon.prototype = {
       members.push(this.slackNameToId(this.membersNotGo[noGoIndex]))
     }
 
+    for (var mustGoIndex = 0; mustGoIndex < this.membersMustGo.length; mustGoIndex++) {
+      members.push(this.slackNameToId(this.membersMustGo[mustGoIndex]))
+    }
+
     return members
   },
   availableMembers: function() {
@@ -120,14 +131,22 @@ LunchWagon.prototype = {
         members.push(fullMembers[i])
       }
     }
+
     return members
   },
   getMembers: function() {
     var shuffled = this.shuffle(this.availableMembers())
     var members = []
-    for (var i = 0; i < this.partyCount; i++) {
+    var partyCount = this.partyCount - this.membersMustGo.lenght
+
+    for (var mustGoIndex = 0; mustGoIndex < this.membersMustGo.length; mustGoIndex++) {
+      members.push(this.slackNameToId(this.membersMustGo[mustGoIndex]))
+    }
+
+    for (var i = 0; i < partyCount; i++) {
       members.push(shuffled[i])
     }
+
     return members
   },
   shuffle: function(array) {
