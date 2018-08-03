@@ -14,19 +14,27 @@ var LunchWagon = function() {
   this.partyCount = 4
   this.skipCount = 5
   this.membersNotGo = []
+  this.membersMustGo = []
 }
 
 LunchWagon.prototype = {
   go: function() {
     var members = this.getMembers()
     this.saveToSheet(members)
+
     var attachments = [{
       title: 'ランダムにメンバーを選んでランチへ行く通知です',
       title_link: 'https://github.com/linyows/lunch-wagon.gs',
       color: '#ffc844',
       text: '行ける or 行けない をスレッドやリアクション絵文字などでお知らせください。'
-          + '参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください'
+          + '参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください。絶対だぞ :pray:'
     }]
+    if (this.membersMustGo.length > 0) {
+      attachments[0]['fields'] = [{
+        title: 'ヘビロテ メンバー :fire:',
+        value: this.membersMustGo.join(', ')
+      }]
+    }
     this.notifyToSlack(this.buildMessage(members), JSON.stringify(attachments))
   },
   notifyFinal: function() {
@@ -38,7 +46,7 @@ LunchWagon.prototype = {
       title: 'ランダムにメンバーを選んでランチへ行く通知です',
       title_link: 'https://github.com/linyows/lunch-wagon.gs',
       color: '#ffc844',
-      text: '参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください'
+      text: '参加者に変更があったら、 <' + this.sheetUrl + '|管理シート> を更新してください。絶対だぞ :heart:'
     }]
     this.notifyToSlack(this.buildFinalMessage(members), JSON.stringify(attachments))
   },
@@ -93,11 +101,13 @@ LunchWagon.prototype = {
       rowCount = rowIndex
       rowIndex = 1
     }
+
     var data = this.sheet().getSheetValues(rowIndex, columnIndex, rowCount, this.sheet().getLastColumn())
 
     var members = []
     for (var rowIndex = 0; rowIndex < data.length; rowIndex++) {
       var row = data[rowIndex]
+
       for (var colIndex = 0; colIndex < row.length; colIndex++) {
         if (row[colIndex].trim() !== '') {
           members.push(this.slackNameToId(row[colIndex].trim()))
@@ -109,10 +119,15 @@ LunchWagon.prototype = {
       members.push(this.slackNameToId(this.membersNotGo[noGoIndex]))
     }
 
+    for (var mustGoIndex = 0; mustGoIndex < this.membersMustGo.length; mustGoIndex++) {
+      members.push(this.slackNameToId(this.membersMustGo[mustGoIndex]))
+    }
+
     return members
   },
   availableMembers: function() {
     var fullMembers = this.getMembersBySlack()
+
     var excludedMembers = this.excludedMembers()
     var members = []
     for (var i = 0; i < fullMembers.length; i++) {
@@ -120,14 +135,22 @@ LunchWagon.prototype = {
         members.push(fullMembers[i])
       }
     }
+
     return members
   },
   getMembers: function() {
     var shuffled = this.shuffle(this.availableMembers())
     var members = []
-    for (var i = 0; i < this.partyCount; i++) {
+    var partyCount = this.partyCount - this.membersMustGo.lenght
+
+    for (var mustGoIndex = 0; mustGoIndex < this.membersMustGo.length; mustGoIndex++) {
+      members.push(this.slackNameToId(this.membersMustGo[mustGoIndex]))
+    }
+
+    for (var i = 0; i < partyCount; i++) {
       members.push(shuffled[i])
     }
+
     return members
   },
   shuffle: function(array) {
