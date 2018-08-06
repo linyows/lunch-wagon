@@ -143,12 +143,12 @@ LunchWagon.prototype = {
     var members = []
     var partyCount = this.partyCount - this.membersMustGo.length
 
-    for (var mustGoIndex = 0; mustGoIndex < this.membersMustGo.length; mustGoIndex++) {
-      members.push(this.slackNameToId(this.membersMustGo[mustGoIndex]))
-    }
-
     for (var i = 0; i < partyCount; i++) {
       members.push(shuffled[i])
+    }
+
+    for (var mustGoIndex = 0; mustGoIndex < this.membersMustGo.length; mustGoIndex++) {
+      members.push(this.slackNameToId(this.membersMustGo[mustGoIndex]))
     }
 
     return members
