@@ -56,16 +56,16 @@ class Slack {
   public userProfiles(users: string[]): object[] {
     const profiles = []
 
-    for (let i = 0; i < users.length; i++) {
+    for (const user of users) {
       const res = UrlFetchApp.fetch('https://slack.com/api/users.profile.get', {
         method: 'post',
         payload: {
           token: this.token,
-          user: users[i]
+          user: user
         }
       })
       const name = JSON.parse(res.getContentText()).profile.display_name
-      profiles.push({id: users[i], name: name})
+      profiles.push({id: user, name: name})
     }
 
     return profiles
@@ -165,9 +165,12 @@ class LunchWagon {
   constructor(c: IConfig) {
     this.config = c
   }
-  public static isHoliday(date: Date): boolean {
+
+  public static IS_HOLIDAY(date: Date): boolean {
+    const startWeek = 0
+    const endWeek = 6
     const weekInt = date.getDay()
-    if (weekInt <= 0 || 6 <= weekInt) {
+    if (weekInt <= startWeek || endWeek <= weekInt) {
       return true
     }
     const calendarId = 'ja.japanese#holiday@group.v.calendar.google.com'
@@ -175,6 +178,30 @@ class LunchWagon {
     const events = calendar.getEventsForDay(date)
 
     return events.length > 0
+  }
+
+  private static shuffle(array: string[]): string[] {
+    let n = array.length
+
+    while (n) {
+      n -= 1
+      const i = Math.floor(Math.random() * n)
+      const t = array[n]
+      array[n] = array[i]
+      array[i] = t
+    }
+
+    return array
+  }
+
+  private static buildMessage(text: string, members: string[]): string {
+    let message = text
+
+    for (const member of members) {
+      message = `${message} <@${member}>`
+    }
+
+    return message
   }
 
   public go(): void {
@@ -192,7 +219,7 @@ class LunchWagon {
     const opts = {
       username: this.config.slack.username,
       icon_url: this.config.slack.icon_url,
-      text: this.buildMessage(members),
+      text: LunchWagon.buildMessage('明日、ランチ一緒に行きませんか！', members),
       attachments: JSON.stringify(attachments)
     }
 
@@ -201,11 +228,11 @@ class LunchWagon {
     if (this.config.singleChannelUsers.length > 0) {
       const channels: string[] = []
       const users = this.config.singleChannelUsers
-      for (let i = 0; i < users.length; i++) {
-        if (members.indexOf(this.slackNameToId(users[i].username)) != -1 &&
-            channels.indexOf(users[i].channel) === -1) {
-          channels.push(users[i].channel)
-          this.slack.postMessage(users[i].channel, opts)
+      for (const user of users) {
+        if (members.indexOf(this.slackNameToId(user.username)) !== -1 &&
+            channels.indexOf(user.channel) === -1) {
+          channels.push(user.channel)
+          this.slack.postMessage(user.channel, opts)
         }
       }
     }
@@ -221,7 +248,7 @@ class LunchWagon {
     const opts = {
       username: this.config.slack.username,
       icon_url: this.config.slack.icon_url,
-      text: this.buildFinalMessage(members),
+      text: LunchWagon.buildMessage('今日、ランチの予定があります！', members),
       attachments: JSON.stringify([this.config.slack.attachment])
     }
 
@@ -230,11 +257,11 @@ class LunchWagon {
     if (this.config.singleChannelUsers.length > 0) {
       const channels: string[] = []
       const users = this.config.singleChannelUsers
-      for (let i = 0; i < users.length; i++) {
-        if (members.indexOf(this.slackNameToId(users[i].username)) != -1 &&
-            channels.indexOf(users[i].channel) === -1) {
-          channels.push(users[i].channel)
-          this.slack.postMessage(users[i].channel, opts)
+      for (const user of users) {
+        if (members.indexOf(this.slackNameToId(user.username)) !== -1 &&
+            channels.indexOf(user.channel) === -1) {
+          channels.push(user.channel)
+          this.slack.postMessage(user.channel, opts)
         }
       }
     }
@@ -249,11 +276,11 @@ class LunchWagon {
   }
 
   private slackIdToName(id: string): string {
-    const m = this.slackMembers()
+    const members = this.slackMembers()
 
-    for (let i = 0; i < m.length; i++) {
-      if (m[i].id === id) {
-        return m[i].name
+    for (const member of members) {
+      if (member.id === id) {
+        return member.name
       }
     }
 
@@ -261,11 +288,11 @@ class LunchWagon {
   }
 
   private slackNameToId(name: string): string {
-    const m = this.slackMembers()
+    const members = this.slackMembers()
 
-    for (let i = 0; i < m.length; i++) {
-      if (m[i].name === name) {
-        return m[i].id
+    for (const member of members) {
+      if (member.name === name) {
+        return member.id
       }
     }
 
@@ -279,11 +306,10 @@ class LunchWagon {
     const data = this.sheet.getSheetValues(rowIndex, columnIndex, rowCount, this.config.partyCount)
     const members = []
 
-    for (let i = 0; i < data.length; i++) {
-      const row = data[i]
-      for (let colIndex = 0; colIndex < row.length; colIndex++) {
-        if (row[colIndex].trim() !== '') {
-          members.push(this.slackNameToId(row[colIndex].trim()))
+    for (const row of data) {
+      for (const col of row) {
+        if (col.trim() !== '') {
+          members.push(this.slackNameToId(col.trim()))
         }
       }
     }
@@ -306,22 +332,20 @@ class LunchWagon {
     const data = this.sheet.getSheetValues(rowIndex, columnIndex, rowCount, this.sheet.getLastColumn())
 
     const members = []
-    for (let i = 0; i < data.length; i++) {
-      const row = data[i]
-
-      for (let colIndex = 0; colIndex < row.length; colIndex++) {
-        if (row[colIndex].trim() !== '') {
-          members.push(this.slackNameToId(row[colIndex].trim()))
+    for (const row of data) {
+      for (const col of row) {
+        if (col.trim() !== '') {
+          members.push(this.slackNameToId(col.trim()))
         }
       }
     }
 
-    for (let noGoIndex = 0; noGoIndex < this.config.membersNotGo.length; noGoIndex++) {
-      members.push(this.slackNameToId(this.config.membersNotGo[noGoIndex]))
+    for (const notGo of this.config.membersNotGo) {
+      members.push(this.slackNameToId(notGo))
     }
 
-    for (let mustGoIndex = 0; mustGoIndex < this.config.membersMustGo.length; mustGoIndex++) {
-      members.push(this.slackNameToId(this.config.membersMustGo[mustGoIndex]))
+    for (const mustGo of this.config.membersMustGo) {
+      members.push(this.slackNameToId(mustGo))
     }
 
     return members
@@ -332,10 +356,10 @@ class LunchWagon {
 
     const users = this.config.singleChannelUsers
     if (users.length > 0) {
-      for (let i = 0; i < users.length; i++) {
-        const user = this.slackNameToId(users[i].username)
-        if (user !== '') {
-          fullMembers.push(user)
+      for (const user of users) {
+        const id = this.slackNameToId(user.username)
+        if (id !== '') {
+          fullMembers.push(id)
         }
       }
     }
@@ -343,9 +367,9 @@ class LunchWagon {
     const excludedMembers = this.excludedMembers()
     const members = []
 
-    for (let i = 0; i < fullMembers.length; i++) {
-      if (excludedMembers.indexOf(fullMembers[i]) === -1) {
-        members.push(fullMembers[i])
+    for (const member of fullMembers) {
+      if (excludedMembers.indexOf(member) === -1) {
+        members.push(member)
       }
     }
 
@@ -353,53 +377,20 @@ class LunchWagon {
   }
 
   private members(): string[] {
-    const shuffled = this.shuffle(this.availableMembers())
+    const shuffled = LunchWagon.shuffle(this.availableMembers())
 
     const members = []
     const partyCount = this.config.partyCount - this.config.membersMustGo.length
 
-    for (let i = 0; i < partyCount; i++) {
+    for (let i = 0; i < partyCount; i += 1) {
       members.push(shuffled[i])
     }
 
-    for (let mustGoIndex = 0; mustGoIndex < this.config.membersMustGo.length; mustGoIndex++) {
-      members.push(this.slackNameToId(this.config.membersMustGo[mustGoIndex]))
+    for (const mustGo of this.config.membersMustGo) {
+      members.push(this.slackNameToId(mustGo))
     }
 
     return members
-  }
-
-  private shuffle(array: string[]): string[] {
-    let n = array.length
-
-    while (n) {
-      const i = Math.floor(Math.random() * n--)
-      const t = array[n]
-      array[n] = array[i]
-      array[i] = t
-    }
-
-    return array
-  }
-
-  private buildMessage(members: string[]): string {
-    let message = '明日、ランチ一緒に行きませんか！'
-
-    for (let i = 0; i < members.length; i++) {
-      message = message + ' <@' + members[i] + '>'
-    }
-
-    return message
-  }
-
-  private buildFinalMessage(members: string[]): string {
-    let message = '今日、ランチの予定があります！'
-
-    for (let i = 0; i < members.length; i++) {
-      message = message + ' <@' + members[i] + '>'
-    }
-
-    return message
   }
 
   private saveToSheet(members: string[]): void {
@@ -408,8 +399,8 @@ class LunchWagon {
     const today = Utilities.formatDate(date, 'Asia/Tokyo', 'yyyy/MM/dd')
     const data = []
 
-    for (let i = 0; i < members.length; i++) {
-      data.push(this.slackIdToName(members[i]))
+    for (const member of members) {
+      data.push(this.slackIdToName(member))
     }
 
     data.unshift(today)
@@ -435,7 +426,7 @@ const wagon = new LunchWagon({
       title_link: 'https://github.com/linyows/lunch-wagon.gs',
       color: '#ffc844',
       text: '行ける or 行けない をスレッドやリアクション絵文字などでお知らせください。'
-          + '参加者に変更があったら、 <' + sheetUrl + '|管理シート> を更新してください。:pray:'
+          + `参加者に変更があったら、 <${sheetUrl}|管理シート> を更新してください。:pray:`
     }
   },
   spreadsheets: {
@@ -456,7 +447,7 @@ const wagon = new LunchWagon({
 function notifyChoseMembers() {
   const date = new Date()
   date.setDate(date.getDate() + 1)
-  if (!LunchWagon.isHoliday(date)) {
+  if (!LunchWagon.IS_HOLIDAY(date)) {
     wagon.go()
   }
 }
@@ -466,7 +457,7 @@ function notifyChoseMembers() {
  */
 function notifyFinal() {
   const date = new Date()
-  if (!LunchWagon.isHoliday(date)) {
+  if (!LunchWagon.IS_HOLIDAY(date)) {
     wagon.notifyFinal()
   }
 }

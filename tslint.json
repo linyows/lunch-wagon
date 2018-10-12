@@ -43,7 +43,21 @@
       "parameter",
       "property-declaration",
       "member-variable-declaration"
-    ]
+    ],
+    "insecure-random": false,
+    "no-cookies": false,
+    "no-use-before-declare": false,
+    "await-promise": false,
+    "match-default-export-name": false,
+    "no-floating-promises": false,
+    "no-for-in-array": false,
+    "promise-function-async": false,
+    "restrict-plus-operands": false,
+    "strict-boolean-expressions": false,
+    "no-unnecessary-qualifier": false,
+    "no-unnecessary-type-assertion": false,
+    "no-void-expression": false,
+    "use-default-type-parameter": false
   },
   "rulesDirectory": [
     "node_modules/tslint-microsoft-contrib"
