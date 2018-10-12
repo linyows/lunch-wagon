@@ -1,21 +1,24 @@
 {
   "name": "lunch-wagon",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Notify lunch members from slack usergroup random selects",
   "scripts": {
     "ci": "npm i && npm run lint",
-    "lint": "eslint **/*.gs --fix"
+    "lint": "tslint src/*.ts",
+    "lint:fix": "tslint --fix src/*.ts"
   },
   "devDependencies": {
-    "eslint": "^5.0.0",
-    "eslint-config-google": "^0.10.0",
-    "eslint-plugin-async-await": "0.0.0"
+    "@google/clasp": "^1.6.3",
+    "tslint": "^5.11.0",
+    "tslint-microsoft-contrib": "^5.2.1"
   },
-  "eslintIgnore": [
+  "tslintIgnore": [
     "**/node_modules/**"
   ],
   "author": "linyows",
   "license": "MIT",
-  "private": true,
-  "homepage": "https://github.com/linyows/lunch-wagon.gs"
+  "homepage": "https://github.com/linyows/lunch-wagon.gs",
+  "dependencies": {
+    "@types/google-apps-script": "0.0.29"
+  }
 }
