@@ -9,7 +9,8 @@
   },
   "devDependencies": {
     "@google/clasp": "^1.6.3",
-    "tslint": "^5.11.0"
+    "tslint": "^5.11.0",
+    "tslint-microsoft-contrib": "^5.2.1"
   },
   "tslintIgnore": [
     "**/node_modules/**"
@@ -18,7 +19,6 @@
   "license": "MIT",
   "homepage": "https://github.com/linyows/lunch-wagon.gs",
   "dependencies": {
-    "@types/google-apps-script": "0.0.29",
-    "tslint-microsoft-contrib": "^5.2.1"
+    "@types/google-apps-script": "0.0.29"
   }
 }
