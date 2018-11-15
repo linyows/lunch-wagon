@@ -12,6 +12,8 @@ Notify the Slack channel of the lunch members selected from the Slack user group
 Usage
 -----
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/linyows/lunch-wagon.svg)](https://greenkeeper.io/)
+
 1. Deploy this
     ```sh
     $ npm i
