@@ -411,14 +411,22 @@ class LunchWagon {
 /**
  * Main
  */
-const sheetId = PropertiesService.getScriptProperties().getProperty('SHEET_ID')
+const sheetId = PropertiesService
+  .getScriptProperties()
+  .getProperty('SHEET_ID')
 const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit`
 
 const wagon = new LunchWagon({
   slack: {
-    token: PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN'),
-    channel: PropertiesService.getScriptProperties().getProperty('SLACK_CHANNEL'),
-    usergroup: PropertiesService.getScriptProperties().getProperty('SLACK_USERGROUP_ID'),
+    token: PropertiesService
+      .getScriptProperties()
+      .getProperty('SLACK_ACCESS_TOKEN'),
+    channel: PropertiesService
+      .getScriptProperties()
+      .getProperty('SLACK_CHANNEL'),
+    usergroup: PropertiesService
+      .getScriptProperties()
+      .getProperty('SLACK_USERGROUP_ID'),
     icon_url: 'https://raw.githubusercontent.com/linyows/lunch-wagon.gs/master/misc/icon.png',
     username: 'Lunch Wagon',
     attachment: {
