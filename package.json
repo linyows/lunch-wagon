@@ -10,7 +10,7 @@
   "devDependencies": {
     "@google/clasp": "^1.6.3",
     "tslint": "^5.11.0",
-    "tslint-microsoft-contrib": "^5.2.1"
+    "tslint-microsoft-contrib": "^6.0.0"
   },
   "tslintIgnore": [
     "**/node_modules/**"
