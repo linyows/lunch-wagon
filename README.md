@@ -1,13 +1,13 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/linyows/lunch-wagon.gs/master/misc/lunch-wagon.png" width="300"><br>
+<img src="https://raw.githubusercontent.com/linyows/lunch-wagon/master/misc/lunch-wagon.png" width="300"><br>
 <strong>Lunch Wagon</strong> for GAS
 </p>
 
 Notify the Slack channel of the lunch members selected from the Slack user group (skipping holidays). Also, keep records on Google Sheets so that members do not overlap.
 
-<a href="https://travis-ci.org/linyows/lunch-wagon.gs" title="travis"><img src="https://img.shields.io/travis/linyows/lunch-wagon.gs.svg?style=for-the-badge"></a>
+<a href="https://travis-ci.org/linyows/lunch-wagon" title="travis"><img src="https://img.shields.io/travis/linyows/lunch-wagon.svg?style=for-the-badge"></a>
 <a href="https://github.com/google/clasp" title="clasp"><img src="https://img.shields.io/badge/built%20with-clasp-4285f4.svg?style=for-the-badge"></a>
-<a href="https://github.com/linyows/lunch-wagon.gs/blob/master/LICENSE" title="MIT License"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge"></a>
+<a href="https://github.com/linyows/lunch-wagon/blob/master/LICENSE" title="MIT License"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge"></a>
 
 Usage
 -----
@@ -26,7 +26,7 @@ Usage
     - SLACK_USERGROUP_ID
     - SHEET_ID
 1. Add triger
-   ![trigger](https://raw.githubusercontent.com/linyows/lunch-wagon.gs/master/misc/trigger.png)
+   ![trigger](https://raw.githubusercontent.com/linyows/lunch-wagon/master/misc/trigger.png)
 
 
 ### Functions
@@ -37,7 +37,7 @@ Usage
 Contribution
 ------------
 
-1. Fork (https://github.com/linyows/lunch-wagon.gs/fork)
+1. Fork (https://github.com/linyows/lunch-wagon/fork)
 1. Create a feature branch
 1. Commit your changes
 1. Rebase your local changes against the master branch
