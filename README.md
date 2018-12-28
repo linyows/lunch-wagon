@@ -20,19 +20,27 @@ Usage
     $ npx clasp push
     ```
 1. Create google spreadsheet
-1. Set environments
+    - Sheet name is `history`
+1. Set script properties as ENV(File > Project properties > Script properties)
     - SLACK_ACCESS_TOKEN
     - SLACK_CHANNEL
     - SLACK_USERGROUP_ID
     - SHEET_ID
-1. Add triger
-   ![trigger](https://raw.githubusercontent.com/linyows/lunch-wagon/master/misc/trigger.png)
-
-
-### Functions
-
-- notifyChoseMembers
-- notifyFinal
+1. Add project trigger(Edit > Current project's triggers > Add trigger)
+    - notifyChoseMembers
+        - Choose which function to run: `notifyChoseMembers`
+        - Which run at deployment: `head`
+        - Select event source: `Time-driven`
+        - Select type of time based trigger: `Week timer`
+        - Select hour interval: `Every monday`
+        - Select time of day: `10am to 11am`
+    - notifyFinal
+        - Choose which function to run: `notifyFinal`
+        - Which run at deployment: `head`
+        - Select event source: `Time-driven`
+        - Select type of time based trigger: `Week timer`
+        - Select hour interval: `Every Tuesday`
+        - Select time of day: `9am to 10am`
 
 Contribution
 ------------
